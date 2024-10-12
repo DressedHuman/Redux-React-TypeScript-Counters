@@ -8,7 +8,7 @@ type CounterProp = {
 
 const Counter = ({ count, incrementHandler, decrementHandler }: CounterProp) => {
     return (
-        <div className="bg-white flex justify-center items-center flex-col gap-7 p-7">
+        <div className="bg-white flex justify-center items-center flex-col gap-7 p-7 rounded">
             <p className="text-black font-medium text-xl">{count}</p>
             <div className="flex justify-center items-center gap-7">
                 <Button contentText="Increment" handler={incrementHandler} />

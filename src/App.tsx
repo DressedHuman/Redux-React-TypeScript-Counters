@@ -1,55 +1,22 @@
-import { useState } from "react"
+import { RootState } from "./app/store";
 import Counter from "./components/Counter/Counter"
+import { useDispatch, useSelector } from "react-redux";
+import { decrement, increment } from "./features/counters/countersSlice";
 
-type Count = {
-  id: number,
-  value: number,
-}
-
-type InitialCounts = Count[]
-
-const initialCounts: InitialCounts = [
-  {
-    id: 1,
-    value: 0,
-  },
-  {
-    id: 2,
-    value: 0,
-  },
-]
 
 function App() {
-  const [counters, setCounters] = useState(initialCounts);
+  const counters = useSelector((state: RootState) => state.counters);
+  const dispatch = useDispatch();
+
   const totalCounts = counters.reduce((sum, current) => sum + current.value, 0);
 
-  const increment = (counterId: number) => {
-    const updatedCounters = counters.map(counter => {
-      if (counter.id === counterId) {
-        return {
-          ...counter,
-          value: counter.value + 1,
-        };
-      }
-      return counter;
-    });
-
-    setCounters(updatedCounters);
+  const incrementHandler = (counterId: number) => {
+    dispatch(increment(counterId));
   }
 
 
-  const decrement = (counterId: number) => {
-    const updatedCounters = counters.map(counter => {
-      if (counter.id === counterId) {
-        return {
-          ...counter,
-          value: counter.value - 1,
-        }
-      }
-      return counter;
-    });
-
-    setCounters(updatedCounters);
+  const decrementHandler = (counterId: number) => {
+    dispatch(decrement(counterId));
   }
 
   return (
@@ -57,19 +24,19 @@ function App() {
       <h2 className="text-2xl font-medium">Simple Counter Application</h2>
       <div className="space-y-5">
         {/* counter cards */}
-        <div className="flex justify-center items-center gap-7">
+        <div className="flex flex-col md:flex-row justify-center items-center gap-7">
           {
             counters.map(counter => <Counter
               key={counter.id}
               count={counter.value}
-              incrementHandler={() => increment(counter.id)}
-              decrementHandler={() => decrement(counter.id)}
+              incrementHandler={() => incrementHandler(counter.id)}
+              decrementHandler={() => decrementHandler(counter.id)}
             />)
           }
         </div>
 
         {/* total counts card */}
-        <div className="w-full px-5 py-3 flex justify-center items-center bg-white">
+        <div className="w-full px-5 py-3 flex justify-center items-center bg-white rounded order-1 md:order-2">
           <p className="text-black text-xl font-semibold">Total Count(s): {totalCounts}</p>
         </div>
       </div>
